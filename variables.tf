@@ -7,10 +7,14 @@ variable "gcp_service_list" {
     "iap.googleapis.com",
     "run.googleapis.com",
     "cloudasset.googleapis.com",
-    "cloudresourcemanager.googleapis.com"
+    "cloudresourcemanager.googleapis.com",
+    "iamcredentials.googleapis.com",
+    "secretmanager.googleapis.com",
   ]
 }
 
+
+# Deployment Variables
 variable "container_image" {
   type        = string
   description = "Container registry path for the Just In Time application"
@@ -46,6 +50,13 @@ variable "application_name" {
   description = "The name of the application"
 }
 
+variable "allow_unauthenticated_invocations" {
+  type        = bool
+  description = "Opens the jit http endpoint up to unauthenticated users. This is ill-advised."
+  default     = false
+}
+
+## Scope Variables
 variable "scope_type" {
   type        = string
   description = "The level in google cloud hierarchy the application sits"
@@ -57,26 +68,42 @@ variable "scope_type" {
 
 variable "acting_project" {
   type        = string
-  description = "Optional: Only needed if scope_type set to 'projects'"
+  description = "Project ID when scope_type set to 'projects'"
   default     = ""
 }
 
 
 variable "acting_folder" {
   type        = string
-  description = "Optional: Only needed if scope_type set to 'folders'"
+  description = "Folder ID when scope_type set to 'folders'"
   default     = ""
 }
 
 
 variable "acting_organization" {
   type        = string
-  description = "Optional: Only needed if scope_type set to 'organizations'"
+  description = "Organization ID when scope_type set to 'organizations'"
   default     = ""
 }
 
-variable "allow_unauthenticated_invocations" {
-  type    = bool
-  description = "Opens the jit http endpoint up to unauthenticated users. This is ill-advised."
-  default = false
+
+
+# Multi-Party-Approval Variables
+variable "enable_multi_party_approval" {
+  type        = bool
+  description = "Enable approval settings"
+  default     = false
+}
+
+variable "smtp_user_workspace_principle" {
+  type        = string
+  default     = ""
+  description = "Email for your Google Workspace bot"
+}
+
+# if you input the password in this manner please use some tool to encrypt it in your git repo (see https://github.com/getsops/sops)
+variable "smtp_user_workspace_token" {
+  type        = string
+  default     = ""
+  description = "Password for your Google Workspace email bot"
 }
