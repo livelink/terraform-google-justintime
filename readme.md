@@ -4,56 +4,14 @@ _[Just In Time](https://cloudnativenow.com/features/just-in-time-permissions-in-
 A Google Cloud Community group has created [jit-access](https://github.com/GoogleCloudPlatform/jit-access),
 an application that gives users the ability to request additional permissions from a configured list of roles.<br>
 
-### How do I use it?
-- A user accesses the web applications front page.
-- Enters the project id where they want the escalated role.
-- Selects which role they need from the available list.
-- Chooses the ttl for the requested access.
-- inputs reason or ticket id.
+This is a terraform module covering most configurable options jit-access provides. 
+
+>**Info:** 
+> The only configuration I chose not to include is the iam bindings set for users. 
+> I have included examples and explanation in the [jit-access-readme.md](docs/jit-access-readme.md) file. 
 
 
-
-### How does it work?
-
-Depending on the scope of your deployment, the application is assigned either _Project_, _Folder_ or _Organisation_ `Security Admin` Role. <br>
-Using this it searches through bindings the users constraints for either `has({}.jitAccessConstraint)` `has({}.multiPartyApprovalConstraint)` <br>
-Matches are given to the user as escelation options. <br>
-The selected roles are assigned with a `JIT access activation` Condition which works like a normal Expiring access duration Condition. 
-
-
-
-### How do I configure what roles I assign a user? 
-You can configure what roles are eligible for escalation just like you would any other iam role with a condition.<br>
-```terraform
-#This is a iam binding for an automatic approval
-resource "google_project_iam_member" "no_approval_required" {
-
-  role    = "role/container.admin"
-  member  = "user@company.com"
-  project = var.project
-  condition {
-    title      = "Eligible for JIT access - automatic"
-    expression = "has({}.jitAccessConstraint)"
-  }
-}
-```
-```terraform
-#This is a iam binding that requires an approval
-resource "google_project_iam_member" "approval_required" {
-
-  role    = "role/container.admin"
-  member  = "user@company.com"
-  project = var.project
-  condition {
-    title      = "Eligible for JIT access - approval"
-    expression = "has({}.multiPartyApprovalConstraint)"
-  }
-}
-```
-
-
-# How to use the module
-I have created this module to cover most configuration options.
+## How to use the module
 
 ### Scope
 jit-access allows you to set the scope of the application in the [hierarchy](https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy). <br>
@@ -79,3 +37,6 @@ It will require creating a workspace user account, instructions on how to do thi
 Cloud Run allows you to open invocations up to the internet.
 Although you will be behind the IAP this setting should be still be off. <br>
 I have given you access to change this `allow_unauthenticated_invocations`
+
+-------- 
+For more information on jit-access see [jit-access-readme.md](docs/jit-access-readme.md)
