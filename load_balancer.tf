@@ -1,8 +1,10 @@
-resource "google_compute_global_address" "default" {
+# sets global address name
+  resource "google_compute_global_address" "default" {
   project = local.deployment_project
   name    = var.application_name
 }
 
+# creates google managed ssl certificate for the provided domain.
 resource "google_compute_managed_ssl_certificate" "default" {
   project = local.deployment_project
   name    = var.application_name
@@ -11,6 +13,7 @@ resource "google_compute_managed_ssl_certificate" "default" {
   }
 }
 
+# creates the load balancers backend service.
 resource "google_compute_backend_service" "default" {
   project = local.deployment_project
   name    = "${var.application_name}-backend"
@@ -29,12 +32,14 @@ resource "google_compute_backend_service" "default" {
   }
 }
 
+# creates a url map with a single route
 resource "google_compute_url_map" "default" {
   project         = local.deployment_project
   name            = var.application_name
   default_service = google_compute_backend_service.default.id
 }
 
+# creates a target https proxy routing to the url map
 resource "google_compute_target_https_proxy" "default" {
   project = local.deployment_project
   name    = var.application_name
@@ -45,6 +50,7 @@ resource "google_compute_target_https_proxy" "default" {
   ]
 }
 
+# forwards traffic to the target https proxy
 resource "google_compute_global_forwarding_rule" "default" {
   project    = local.deployment_project
   name       = var.application_name
@@ -53,6 +59,7 @@ resource "google_compute_global_forwarding_rule" "default" {
   ip_address = google_compute_global_address.default.address
 }
 
+# configures the NEG https://cloud.google.com/load-balancing/docs/negs
 resource "google_compute_region_network_endpoint_group" "default" {
   project               = local.deployment_project
   name                  = var.application_name

@@ -1,19 +1,23 @@
-# Who can access the application it might be better to also keep these alongside your organizations IAM
+# who can access the application it might be better to also keep these alongside your organizations IAM
+## Remove THIS
 resource "google_iap_web_backend_service_iam_member" "iap_http_access" {
+  for_each = var.iap_access_principle
   project             = local.deployment_project
   web_backend_service = google_compute_backend_service.default.name
   role                = "roles/iap.httpsResourceAccessor"
   member              = var.iap_access_principle
 }
 
-# Grant the Cloud Run Invoker role (roles/run.invoker) to the service agent that's used by IAP
+# allows the IAP service account to invoke cloud run
 resource "google_project_iam_member" "iap_invoker" {
   project = local.deployment_project
   role    = "roles/run.invoker"
   member  = "serviceAccount:${google_project_service_identity.default.email}"
 }
 
-# Grant the Cloud run service account access to create tokens for itself
+
+
+# allows the Application to create tokens for itself, needed for multi party approval.
 resource "google_service_account_iam_member" "default" {
   count  = var.enable_multi_party_approval == true ? 1 : 0
   role   = "roles/iam.serviceAccountTokenCreator"
@@ -22,6 +26,7 @@ resource "google_service_account_iam_member" "default" {
   service_account_id = google_service_account.default.name
 }
 
+# allows the application to read the stored workspaces password for multi party approval.
 resource "google_secret_manager_secret_iam_member" "default" {
   count   = var.enable_multi_party_approval == true ? 1 : 0
   project = local.deployment_project
@@ -31,7 +36,10 @@ resource "google_secret_manager_secret_iam_member" "default" {
   secret_id = google_secret_manager_secret.default[0].id
 }
 
-# Grant the roles to allow changes at the requested hierarchy
+
+
+
+# sets the application required roles at either the project, folder or organisation level.
 resource "google_project_iam_member" "application_project_iam_admin" {
   count  = var.acting_project == "" ? 0 : 2
   member = "serviceAccount:${google_service_account.default.email}"

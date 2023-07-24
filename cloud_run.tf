@@ -1,4 +1,4 @@
-# Service account attached to Cloud Run
+# service account attached to Cloud Run Aplication
 resource "google_service_account" "default" {
   description = "JIT Cloud Run Attached Service Account"
   project     = local.deployment_project
@@ -6,7 +6,7 @@ resource "google_service_account" "default" {
 }
 
 
-
+# application resource when multi party approval is off.
 resource "google_cloud_run_service" "no_approval" {
   count    = var.enable_multi_party_approval == false ? 1 : 0
   project  = local.deployment_project
@@ -52,18 +52,20 @@ resource "google_cloud_run_service" "no_approval" {
   }
 }
 
-
-resource "google_cloud_run_service_iam_member" "approval" {
-  count    = var.allow_unauthenticated_invocations == true && var.enable_multi_party_approval == false ? 1 : 0
-  location = google_cloud_run_service.approval[0].location
-  project  = google_cloud_run_service.approval[0].project
-  service  = google_cloud_run_service.approval[0].name
+# allowing unauthenticated users when multi party approval is off.
+resource "google_cloud_run_service_iam_member" "no_approval" {
+  count    = var.allow_unauthenticated_invocations == true && var.enable_multi_party_approval == true ? 1 : 0
+  location = google_cloud_run_service.no_approval[0].location
+  project  = google_cloud_run_service.no_approval[0].project
+  service  = google_cloud_run_service.no_approval[0].name
   role     = "roles/run.invoker"
   member   = "allUsers"
 }
 
 
 
+
+# application resource when multi party approval is on.
 resource "google_cloud_run_service" "approval" {
   count    = var.enable_multi_party_approval == true ? 1 : 0
   project  = local.deployment_project
@@ -123,11 +125,12 @@ resource "google_cloud_run_service" "approval" {
 }
 
 
-resource "google_cloud_run_service_iam_member" "no_approval" {
-  count    = var.allow_unauthenticated_invocations == true && var.enable_multi_party_approval == true ? 1 : 0
-  location = google_cloud_run_service.no_approval[0].location
-  project  = google_cloud_run_service.no_approval[0].project
-  service  = google_cloud_run_service.no_approval[0].name
+# allowing unauthenticated users when multi party approval is on.
+resource "google_cloud_run_service_iam_member" "approval" {
+  count    = var.allow_unauthenticated_invocations == true && var.enable_multi_party_approval == false ? 1 : 0
+  location = google_cloud_run_service.approval[0].location
+  project  = google_cloud_run_service.approval[0].project
+  service  = google_cloud_run_service.approval[0].name
   role     = "roles/run.invoker"
   member   = "allUsers"
 }

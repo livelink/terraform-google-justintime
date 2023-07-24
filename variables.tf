@@ -41,7 +41,7 @@ variable "region" {
 }
 
 variable "iap_access_principle" {
-  type        = string
+  type        = list(string)
   description = "Who is able to access the IAP"
 }
 

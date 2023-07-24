@@ -1,5 +1,5 @@
 
-# Dynamically collects the service account attached to the iap
+# dynamically collects the service account attached to the iap
 # https://registry.terraform.io/providers/hashicorp/google/4.74.0/docs/resources/project_service_identity
 resource "google_project_service_identity" "default" {
   project  = local.deployment_project

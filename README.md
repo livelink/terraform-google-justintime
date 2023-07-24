@@ -35,7 +35,7 @@ It will require creating a workspace user account, instructions on how to do thi
 
 ### Allow Unauthenticated Invocations
 Cloud Run allows you to open invocations up to the internet.
-Although you will be behind the IAP this setting should be still be off. <br>
+Although you will be behind the IAP this setting should be still be off for sensitive applications such as this. <br>
 I have given you access to change this `allow_unauthenticated_invocations`
 
 -------- 
