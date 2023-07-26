@@ -1,7 +1,6 @@
 # who can access the application it might be better to also keep these alongside your organizations IAM
 ## Remove THIS
 resource "google_iap_web_backend_service_iam_member" "iap_http_access" {
-  for_each = var.iap_access_principle
   project             = local.deployment_project
   web_backend_service = google_compute_backend_service.default.name
   role                = "roles/iap.httpsResourceAccessor"
@@ -15,26 +14,6 @@ resource "google_project_iam_member" "iap_invoker" {
   member  = "serviceAccount:${google_project_service_identity.default.email}"
 }
 
-
-
-# allows the Application to create tokens for itself, needed for multi party approval.
-resource "google_service_account_iam_member" "default" {
-  count  = var.enable_multi_party_approval == true ? 1 : 0
-  role   = "roles/iam.serviceAccountTokenCreator"
-  member = "serviceAccount:${google_service_account.default.email}"
-
-  service_account_id = google_service_account.default.name
-}
-
-# allows the application to read the stored workspaces password for multi party approval.
-resource "google_secret_manager_secret_iam_member" "default" {
-  count   = var.enable_multi_party_approval == true ? 1 : 0
-  project = local.deployment_project
-  role    = "roles/secretmanager.secretAccessor"
-  member  = "serviceAccount:${google_service_account.default.email}"
-
-  secret_id = google_secret_manager_secret.default[0].id
-}
 
 
 

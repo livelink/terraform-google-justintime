@@ -2,7 +2,7 @@
 
 
 In order to make jit-access work from this module you will need to configure the access your users have.
-As discussed here [jit-access-readme.md](jit-access-readme.md) I decided when making this module I would draw
+As discussed here [jit-access-readme.md](faq.md) I decided when making this module I would draw
 a hard line between user roles and the roles assigned to the service accounts necessary to get the application capable of performing its duties. 
 Every assigned role in this module is assigned to a service account created in this module. 
 

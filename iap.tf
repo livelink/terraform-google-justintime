@@ -11,8 +11,9 @@ resource "google_project_service_identity" "default" {
 #https://registry.terraform.io/providers/hashicorp/google/latest/docs/resources/iap_brand.html
 resource "google_iap_brand" "default" {
   project           = local.deployment_project
-  support_email     = var.support_email
+  support_email     = var.Oauth_consent_screen_support_email
   application_title = var.application_name
+
 }
 
 

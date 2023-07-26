@@ -25,7 +25,7 @@ variable "project" {
   description = "The project ID where the Just In Time application is deployed into"
 }
 
-variable "support_email" {
+variable "Oauth_consent_screen_support_email" {
   type        = string
   description = "Support email for IAP"
 }
@@ -41,7 +41,7 @@ variable "region" {
 }
 
 variable "iap_access_principle" {
-  type        = list(string)
+  type        = string
   description = "Who is able to access the IAP"
 }
 
@@ -87,23 +87,3 @@ variable "acting_organization" {
 }
 
 
-
-# Multi-Party-Approval Variables
-variable "enable_multi_party_approval" {
-  type        = bool
-  description = "Enable approval settings"
-  default     = false
-}
-
-variable "smtp_user_workspace_principle" {
-  type        = string
-  default     = ""
-  description = "Email for your Google Workspace bot"
-}
-
-# if you input the password in this manner please use some tool to encrypt it in your git repo (see https://github.com/getsops/sops)
-variable "smtp_user_workspace_token" {
-  type        = string
-  default     = ""
-  description = "Password for your Google Workspace email bot"
-}
