@@ -25,7 +25,7 @@ variable "project" {
   description = "The project ID where the Just In Time application is deployed into"
 }
 
-variable "Oauth_consent_screen_support_email" {
+variable "auth_consent_screen_support_email" {
   type        = string
   description = "Support email for IAP"
 }
