@@ -55,7 +55,7 @@ https://registry.terraform.io/modules/terraform-google-modules/iam/google/latest
 
 
 
-### Why didn't you include Multi Party Approval
+### Why didn't you include Multi Party Approval?
 multi party approval is a feature of jit-access that allows you to permit a role but require someone who has that role assigned
 to approve the request before it is assigned. <br>
 I didn't include this configuration for a couple of reasons.
@@ -67,7 +67,7 @@ I didn't include this configuration for a couple of reasons.
     * GoogleCloudPlatform/jit-access#60
 
 
-### Why cant I use a private registry thats not Google Cloud
+### Why cant I use a private registry thats not Google Cloud?
 
 Cloud run only supports Google Cloud private registries and a few public registries directly.
 https://cloud.google.com/run/docs/deploying#other-registries
