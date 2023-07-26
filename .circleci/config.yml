@@ -1,0 +1,15 @@
+version: 2.1
+jobs:
+  tfsec:
+    docker:
+      - image: aquasec/tfsec-alpine:latest
+    steps:
+      - checkout
+      - run:
+          name: Terraform security analysis
+          command: tfsec
+
+workflows:
+  develop:
+    jobs:
+      - tfsec
