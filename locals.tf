@@ -10,4 +10,7 @@ locals {
 
   # Roles required to view assets and to apply changes to iam configuration.
   app_roles = ["roles/iam.securityAdmin", "roles/cloudasset.viewer"]
+
+  # random id requires a list of urls
+  managed_domains = tolist([var.dns_name])
 }

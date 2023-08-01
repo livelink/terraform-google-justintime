@@ -7,9 +7,21 @@
 # creates google managed ssl certificate for the provided domain.
 resource "google_compute_managed_ssl_certificate" "default" {
   project = local.deployment_project
-  name    = var.application_name
+  name    = random_id.certificate.hex
   managed {
-    domains = [var.dns_name]
+    domains = local.managed_domains
+  }
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+# random id generated for ssl name
+resource "random_id" "certificate" {
+  byte_length = 4
+  prefix      = "just-in-time-certificate-"
+  keepers = {
+    domains = join(",", local.managed_domains)
   }
 }
 
