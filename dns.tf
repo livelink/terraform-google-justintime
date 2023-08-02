@@ -1,11 +1,13 @@
 resource "google_dns_managed_zone" "default" {
+  project = var.project
   name        = "iamjustintime-livelinklabs-delegation"
-  dns_name    = var.dns_name
+  dns_name    = "${var.dns_name}."
   description = "Delegated zone for iamjustintime application"
 }
 
 resource "google_dns_record_set" "default" {
-  name = "${google_dns_managed_zone.default.dns_name}."
+  project = var.project
+  name = google_dns_managed_zone.default.dns_name
   type = "A"
   ttl  = 300
 
