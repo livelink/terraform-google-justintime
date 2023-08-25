@@ -56,6 +56,24 @@ variable "allow_unauthenticated_invocations" {
   default     = false
 }
 
+variable "maximum_duration" {
+  type        = number
+  description = "Sets the longest duration that a user can request"
+  default     = 60
+}
+
+variable "justification_hint" {
+  type        = string
+  description = "Hint provided to the user when selecting why they are asking for the role"
+  default     = "Bug or case number"
+}
+
+variable "justification_pattern" {
+  type        = string
+  description = "Regex pattern that justification must match"
+  default     = ".*"
+}
+
 ## Scope Variables
 variable "scope_type" {
   type        = string
