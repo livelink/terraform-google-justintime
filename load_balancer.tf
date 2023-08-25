@@ -1,5 +1,5 @@
 # sets global address name
-  resource "google_compute_global_address" "default" {
+resource "google_compute_global_address" "default" {
   project = local.deployment_project
   name    = var.application_name
 }
