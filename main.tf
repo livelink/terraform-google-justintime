@@ -42,15 +42,15 @@ resource "google_cloud_run_service" "default" {
         }
         env {
           name  = "ACTIVATION_TIMEOUT"
-          value = "60"
+          value = var.maximum_duration
         }
         env {
           name  = "JUSTIFICATION_HINT"
-          value = "Bug or case number"
+          value = var.justification_hint
         }
         env {
           name  = "JUSTIFICATION_PATTERN"
-          value = ".*"
+          value = var.justification_pattern
         }
         env {
           name  = "IAP_BACKEND_SERVICE_ID"
